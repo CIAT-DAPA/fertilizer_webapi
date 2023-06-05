@@ -1,0 +1,8 @@
+docker run --name nextgen -v D:/CIAT/Code/Ethiopia/ethiopia_fertilize_system/data/workspace:/backup -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=s3cr3t -e MONGO_INITDB_DATABASE=nextgen -d mongo:4.2
+
+mongorestore --username=root --password="s3cr3t" /backup/nextgen --authenticationDatabase admin
+
+
+#
+
+mongorestore --db nextgen_db --drop ./nextgen/ 
