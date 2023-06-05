@@ -1,0 +1,24 @@
+# Agroadvisory
+
+pm2 serve agroadvisory 3000 --name agroadvisory --spa
+pm2 delete website
+
+# API Linux
+
+export DEBUG=False
+export WORKSPACE=fertilizer_et
+export LAYER_NAME=:et_wheat_fertilizer_recommendation_normal
+export SERVICE=WFS
+export GEOSERVER_URL="https://geo.aclimate.org/geoserver/"
+export FERTILIZER_RASTERS_DIR="./raster_files/cropped/"
+export PORT=5000
+
+# API Windows
+
+set DEBUG=False
+set WORKSPACE=fertilizer_et
+set LAYER_NAME=:et_wheat_fertilizer_recommendation_normal
+set SERVICE=WFS
+set GEOSERVER_URL="https://geo.aclimate.org/geoserver/"
+set FERTILIZER_RASTERS_DIR="./raster_files/cropped/"
+set PORT=5000
