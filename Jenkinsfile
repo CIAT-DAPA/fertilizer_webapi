@@ -39,7 +39,7 @@ pipeline {
                         unzip -o releaseApi.zip
                         rm -fr releaseApi.zip
                         mkdir api
-                        mv src/webapi/* api
+                        mv src/* api
                         rm -fr src
                     """
                 }
