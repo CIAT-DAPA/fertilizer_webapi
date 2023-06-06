@@ -35,7 +35,7 @@ pipeline {
                         rm -fr api_backup_\$(date +"%Y%m%d")
                         mv api api_backup_\$(date +"%Y%m%d")
                         rm -fr releaseApi.zip
-                        curl -LOk https://github.com/CIAT-DAPA/ethiopia_fertilize_system/releases/latest/download/releaseApi.zip
+                        curl -LOk https://github.com/CIAT-DAPA/fertilizer_webapi/releases/latest/download/releaseApi.zip
                         unzip -o releaseApi.zip
                         rm -fr releaseApi.zip
                         mkdir api
