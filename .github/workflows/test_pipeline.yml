@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Devops Fertalizer
+name: Devops Fertalizer API
 
 on:
   push:
@@ -55,49 +55,32 @@ jobs:
         pip install rasterio
     - name: Install dependencies
       run: |
-        pip install -r ./src/webapi/requirements_devops.txt
+        pip install -r ./src/requirements_devops.txt
     - name: Run Tests
       run: |
-        python -m unittest discover -s ./src/webapi/unit_tests/ -p 'test_*.py'
+        python -m unittest discover -s ./src/unit_tests/ -p 'test_*.py'
 
 
 # ------- END API PROCCESS -------- #    
 
 
 
-# ------- START FRONT PROCCESS -------- #
-  
-    
-  TestFront:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Install packages
-        run: npm --prefix ./src/agroadvisory install
-      - name: Run tests
-        run: npm --prefix ./src/agroadvisory test
-
-# ------- END FRONT PROCCESS -------- #
-
 # ------- START MERGE PROCCESS -------- #
 
   MergeMasterApi:
-    needs: [TestApi, TestFront]
-    name: Merge Pre deploy with Master
+    needs: [TestApi]
+    name: Merge Pre deploy with Main
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
 
-      - name: Merge pre_deploy -> master
+      - name: Merge pre_deploy -> main
         uses: devmasx/merge-branch@master
         with:
           type: now
           head_to_merge: ${{ github.ref }}
-          target_branch: master
+          target_branch: main
           github_token: ${{ github.token }}
 
 # ------- END MERGE PROCCESS -------- #
@@ -118,25 +101,13 @@ jobs:
           node-version: 18
     # API Zip
     - name: Zip artifact for deployment
-      run: zip releaseApi.zip ./src/webapi/* -r
-    # Front Zip
-    - name: Install packages
-      run: npm --prefix ./src/agroadvisory install
-    - name: Run build
-      run: npm --prefix ./src/agroadvisory run build
-    - name: Zip artifact front for deployment
-      run: zip releaseFront.zip ./src/agroadvisory/build/* -r
+      run: zip releaseApi.zip ./src/* -r
     # Upload Artifacts
     - name: Upload Api artifact for deployment job
       uses: actions/upload-artifact@v3
       with:
         name: WebApi
         path: releaseApi.zip
-    - name: Upload Front artifact for deployment job
-      uses: actions/upload-artifact@v3
-      with:
-        name: Frontend
-        path: releaseFront.zip
     # Generate Tagname
     - name: Generate Tagname for release
       id: taggerDryRun
@@ -146,7 +117,7 @@ jobs:
         WITH_V: true
         DRY_RUN: true
         DEFAULT_BUMP: patch
-        RELEASE_BRANCHES : stage,master
+        RELEASE_BRANCHES : stage,main
         BRANCH_HISTORY: last
     # Create release
     - name: Create Release
@@ -171,16 +142,6 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: ./releaseApi.zip
         asset_name: releaseApi.zip
-        asset_content_type: application/zip
-    - name: Upload Release Asset Front
-      id: upload-front-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./releaseFront.zip
-        asset_name: releaseFront.zip
         asset_content_type: application/zip
 
 # ------- END RELEASE PROCCESS -------- #
