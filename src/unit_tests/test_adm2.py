@@ -1,7 +1,7 @@
 import unittest
 import requests
 import sys
-sys.path.append("./src/webapi/")
+sys.path.append("./src/")
 from agroadvisory_api import app
 from mongoengine import connect, disconnect
 
