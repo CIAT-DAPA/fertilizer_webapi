@@ -37,9 +37,9 @@ class TestAgroadisory(unittest.TestCase):
              "https://geo.aclimate.org/geoserver/fertilizer_et/wms?service=WMS&version=1.1.1&request=GetFeatureInfo&layers=et_wheat_compost_probabilistic_above&query_layers=et_wheat_compost_probabilistic_above&feature_count=10&info_format=application%2Fjson&format_options=callback%3AhandleJson&SrsName=EPSG%3A4326&width=101&height=101&x=50&y=50&bbox=36.47521%2C8.25343%2C36.67521%2C8.453429999999999"
              """
         
-        response = requests.get('https://geo.aclimate.org/geoserver/fertilizer_et/wms?service=WMS&version=1.1.1&request=GetFeatureInfo&layers=et_wheat_compost_probabilistic_above&query_layers=et_wheat_compost_probabilistic_above&feature_count=10&info_format=application%2Fjson&format_options=callback%3AhandleJson&SrsName=EPSG%3A4326&width=101&height=101&x=50&y=50&bbox=36.47521%2C8.25343%2C36.67521%2C8.453429999999999',headers={"Content-Type": "application/json"})
+        response = requests.get('https://geo.aclimate.org/geoserver/fertilizer_et/wms?service=WMS&version=1.1.1&request=GetFeatureInfo&time=2022-07&layers=et_wheat_compost_probabilistic_below&query_layers=et_wheat_compost_probabilistic_below&feature_count=10&info_format=application%2Fjson&format_options=callback%3AhandleJson&SrsName=EPSG%3A4326&width=101&height=101&x=50&y=50&bbox=36.41521%2C8.25343%2C36.615210000000005%2C8.453429999999999',headers={"Content-Type": "application/json"})
         responseNotFund = requests.get('https://geo.aclimate.org/geoserver/fertilizer_et/oms?service=WMS&version=1.1.1&request=GetFeatureInfo&layers=et_wheat_compost_probabilistic_above&query_layers=et_wheat_compost_probabilistic_above&feature_count=10&info_format=application%2Fjson&format_options=callback%3AhandleJson&SrsName=EPSG%3A4326&width=101&height=101&x=50&y=50&bbox=36.47521%2C8.25343%2C36.67521%2C8.453429999999999',headers={"Content-Type": "application/json"})
-        print(response.json()['features'][0]['properties']['GRAY_INDEX'])
+        
         self.assertEqual(200, response.status_code)
         self.assertEqual(404, responseNotFund.status_code)
         self.assertEqual(response.json()['features'][0]['properties']['GRAY_INDEX']!=0,True)
