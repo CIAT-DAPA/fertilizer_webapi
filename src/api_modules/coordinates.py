@@ -17,7 +17,7 @@ class Coordinates(Resource):
         """
         Get Features, Information of Urea, NPS, Compost & VCompost and Optimal yield.
         ---
-        description: Should be queried to obtain Urea, NPS, Compost, VCompost or Optimal Yield information for one or more coordinates. This endpoint needs two parameters, **layer** that is name of the layer (the layer names can be obtained from the endpoint `/layers_fertilizer`) and  **coor** array of objects with the coordinates you want to query lat and lon. The endpoint must follow the following format, the endpoint only allows post requests and he will respond with a list of the values of the corresponding layer for each of the coordinates.
+        description: Should be queried to obtain Urea, NPS, Compost, VCompost or Optimal Yield information for one or more coordinates. This endpoint needs three parameters, **layer** that is name of the layer (the layer names can be obtained from the endpoint `/layers_fertilizer`) , **coor** array of objects with the coordinates you want to query lat and lon and finally **date** that is the date (This is the date for which you want to extract each value, you can obtain this date from the 'date' property of the `/forecast` endpoint.).The endpoint must follow the following format, the endpoint only allows post requests and he will respond with a list of the values of the corresponding layer for each of the coordinates.
         parameters:
           - in: path
             name: layer
@@ -38,15 +38,25 @@ class Coordinates(Resource):
             description: date in which you want to extract the information from the mosaic, example 2022-07
         responses:
           200:
-            description: Latitude, longitude and value
+            description: layer ,latitude, longitude, value and date
             schema:
               id: Features
               properties:
+                layer:
+                  type: string
+                  format: string
+                  description: layer of geoserver
+                  example: et_wheat_compost_probabilistic_below
+                date:
+                  type: string
+                  format: string 
+                  description: date in which you want to extract the information from the mosaic
+                  example: 2022-07
                 lat:
                   type: number
                   format: float
                   description: lat
-                  default: 8.5583
+                  example: 7.17712
                 lon:
                   type: number
                   format: float
@@ -103,10 +113,3 @@ class Coordinates(Resource):
 
             
         return list
-
-            
-        
-
-       
-        
-        
