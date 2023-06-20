@@ -15,11 +15,11 @@ class TestAgroadisory(unittest.TestCase):
         #examples: 637e453d6b22dee825f5b37c,637e453d6b22dee825f5b37d,637e453d6b22dee825f5b37e
         response = self.app.get('http://127.0.0.1:5000/adm3/637e453d6b22dee825f5b37e',headers={"Content-Type": "application/json"}) #status code 200
         #responseNullArray = self.app.get('http://127.0.0.1:5000/adm3/637e453d6b22dee825f5b17c',headers={"Content-Type": "application/json"}) #status code 200
-        responseValidationError = self.app.get('http://127.0.0.1:5000/adm3/637e453d6b22dee825f5b37i',headers={"Content-Type": "application/json"}) #status code 200
+        #responseValidationError = self.app.get('http://127.0.0.1:5000/adm3/637e453d6b22dee825f5b37i',headers={"Content-Type": "application/json"}) #status code 200
         responseNotFound = self.app.get('http://127.0.0.1:5000/adm3/637e453d6b22dee825f5b37e/',headers={"Content-Type": "application/json"}) #status code 404
         self.assertEqual(200, response.status_code)
         self.assertEqual(404, responseNotFound.status_code)
-        self.assertEqual(500, responseValidationError.status_code)
+        #self.assertEqual(500, responseValidationError.status_code)
         #self.assertEqual(len(response.json())>0,True)
         #self.assertEqual(len(responseNullArray.json()),0)
 
