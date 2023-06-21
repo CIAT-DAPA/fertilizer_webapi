@@ -8,14 +8,18 @@ class Risks(Resource):
     def __init__(self):
         super().__init__()
 
-    def get(self, adm4 = None):
+    def get(self, adm4 = None, forecast= None):
         """
         Get Risk data for a adminsitrative level 4 (Kebele)
         ---
-        description: Query the risk data for administrative level 4 (Kebele). This endpoint needs one parameter, **adm4** id of the administrative levels 4 (kebele) to be queried (this id can be obtained from the endpoint `/adm4`; The API will respond a object with the list of the risk data from that specific kebele.
+        description: Query the risk data for administrative level 4 (Kebele). This endpoint needs two parameter, **adm4** id of the administrative levels 4 (kebele) to be queried (this id can be obtained from the endpoint `/adm4`, and a second parameter **forecast** this id can be obtained from the endpoint `/forecast`  The API will respond a object with the list of the risk data from that specific kebele.
         parameters:
           - in: path
             name: adm4
+            type: string
+            required: false
+          - in: path
+            name: forecast
             type: string
             required: false
         responses:
@@ -54,6 +58,8 @@ class Risks(Resource):
         else:
             ids = adm4.split(',')
             q_set = Risk.objects(adm4__in=ids)
+        if forecast is not None:
+            q_set= q_set.filter(forecast=forecast)
         json_data = [{"id":str(x.id),"adm4":str(x.adm4.id),"forecast":str(x.forecast.id),"type":str(x.type.id),"risk":x.values[0]} for x in q_set]
         return json_data
         
