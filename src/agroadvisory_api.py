@@ -50,7 +50,7 @@ api.add_resource(AdministrativeLevel4, '/adm4/<adm3>')
 api.add_resource(Crops, '/crops')
 api.add_resource(Forecasts, '/forecast/<crop>')
 api.add_resource(Metrics, '/metrics/<adm4>')
-api.add_resource(Risks, '/risk/<adm4>')
+api.add_resource(Risks, '/risk/<adm4>/<forecast>')
 api.add_resource(Coordinates, '/coordinates/<layer>/<coor>/<date>')
 api.add_resource(Layers, '/layers_fertilizer')
 
