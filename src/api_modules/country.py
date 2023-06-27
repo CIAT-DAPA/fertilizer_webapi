@@ -29,7 +29,7 @@ class Countries(Resource):
         q_set = None
         q_set = Country.objects()
         print(q_set)
-        json_data = [{"id":str(x.id),"name":x.name} for x in q_set]
+        json_data = [{"id":str(x.id),"name":x.name,"iso2":x.iso2} for x in q_set]
         return json_data
 
 
