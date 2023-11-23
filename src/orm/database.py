@@ -2,6 +2,7 @@ from mongoengine import *
 class Country(Document):
     name=StringField(required=True)
     iso2=StringField(required=True)
+    coordinates=StringField(required=True)
 # Region
 class Adm1(Document):
     name = StringField(required=True)
