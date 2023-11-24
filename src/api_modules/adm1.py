@@ -8,11 +8,16 @@ class AdministrativeLevel1(Resource):
     def __init__(self):
         super().__init__()
 
-    def get(self):
+    def get(self, country=None):
         """
         Get all Administrative levels 1 from database (Regions)
         ---
-        description: Query the information of all administrative levels 1 and the API will respond with the list of all regions, this endpoint has no parameters.
+        description: Query the information of all administrative levels 1 and the API will respond with the list of all regions, This endpoint needs one parameter, **counrty** that is id of the countries to be queried (this id can be obtained from the endpoint `/country`); The API will respond with the list of the region from that specific country.
+        parameters:
+          - in: path
+            name: country
+            type: string
+            required: true
         responses:
           200:
             description: Administrative level 1
@@ -28,10 +33,16 @@ class AdministrativeLevel1(Resource):
                 ext_id:
                   type: string
                   description: Extern Id to identify Administrative level 1
+                country:
+                  type: string
+                  description: Id of the country
         """
         q_set = None
-        q_set = Adm1.objects()
-        json_data = [{"id":str(x.id),"name":x.name,"ext_id":x.ext_id} for x in q_set]
+        if country is None:
+            q_set = Adm1.objects()
+        else:
+            q_set = Adm1.objects(country=country)
+        json_data = [{"id":str(x.id),"name":x.name,"ext_id":x.ext_id,"country":str(x.country.id)} for x in q_set]
         return json_data
 
 
