@@ -13,6 +13,7 @@ from api_modules.woreda import Woreda
 # New Modules
 from mongoengine import *
 from api_modules.adm1 import AdministrativeLevel1
+from api_modules.country import Countries
 from api_modules.adm2 import AdministrativeLevel2
 from api_modules.adm3 import AdministrativeLevel3
 from api_modules.adm4 import AdministrativeLevel4
@@ -43,7 +44,8 @@ def home():
 #api.add_resource(ClippingRaster, '/clip_raster')
 
 # New methods
-api.add_resource(AdministrativeLevel1, '/adm1')
+api.add_resource(AdministrativeLevel1, '/adm1/<country>')
+api.add_resource(Countries, '/country')
 api.add_resource(AdministrativeLevel2, '/adm2/<adm1>')
 api.add_resource(AdministrativeLevel3, '/adm3/<adm2>')
 api.add_resource(AdministrativeLevel4, '/adm4/<adm3>')

@@ -1,9 +1,13 @@
 from mongoengine import *
-
+class Country(Document):
+    name=StringField(required=True)
+    iso2=StringField(required=True)
+    coordinates=StringField(required=True)
 # Region
 class Adm1(Document):
     name = StringField(required=True)
     ext_id = StringField(required=False)
+    country = ReferenceField(Country)
 
 # Zone
 class Adm2(Document):
@@ -47,3 +51,4 @@ class Risk(Document):
     forecast = ReferenceField(Forecast)
     type = ReferenceField(MetricType)
     values = ListField(required= True)
+
