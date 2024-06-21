@@ -69,9 +69,11 @@ class Coordinates(Resource):
                   example: 20.00
                 
         """
+        print(coor)
+        coor = coor.strip() 
         arr=ast.literal_eval(coor)
-        print(arr[0]['lat'])
-        print(len(arr))
+        print(coor)
+        
         list=[]
         for i in arr:
             lat=i['lat']
@@ -94,7 +96,6 @@ class Coordinates(Resource):
                 'bbox':str(lon - 0.1) + ',' + str(lat - 0.1) + ',' + str(lon + 0.1) + ',' + str(lat + 0.1)}
 
             self.url=str(URLSearchParams(GEOSERVER_URL + SERVICEE).append(parameters))
-            print(self.url)
             
             response= requests.get(self.url)
             data= response.json()
