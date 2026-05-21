@@ -6,21 +6,21 @@ pipeline {
     agent any
 
     environment {
-        user = credentials('fertalizer_user')
-        host = credentials('fertalizer_host')
-        name = credentials('fertalizer_name')
-        ssh_key = credentials('fertalizer_devops')
+        user = credentials('agroadvisory_user')
+        host = credentials('agroadvisory_host')
+        //name = credentials('fertalizer_name')
+        //ssh_key = credentials('fertalizer_devops')
     }
 
     stages {
-        stage('Ssh to connect Tesla server') {
+        stage('Ssh to connect 192.168.199.121 server') {
             steps {
                 script {
                     // Set up remote SSH connection parameters
                     remote.allowAnyHosts = true
                     remote.identityFile = ssh_key
                     remote.user = user
-                    remote.name = name
+                    //remote.name = name
                     remote.host = host
                     
                 }
