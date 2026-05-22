@@ -4,7 +4,6 @@ certifi==2022.5.18.1
 click==8.0.4
 click-plugins==1.1.1
 cligj==0.7.2
-dataclasses==0.8
 Fiona==1.8.21
 flasgger==0.9.5
 Flask==2.0.3
