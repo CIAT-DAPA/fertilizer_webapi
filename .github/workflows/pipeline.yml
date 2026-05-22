@@ -39,15 +39,8 @@ jobs:
         conda activate fertalizer
     - name: Install Libgdal
       run: |
-        sudo add-apt-repository ppa:ubuntugis/ppa
         sudo apt-get update
-        sudo apt-get install libgdal-dev
-    - name: Install Gdal
-      run: |
-        sudo apt-get install gdal-bin
-        export CPLUS_INCLUDE_PATH=/usr/include/gdal
-        export C_INCLUDE_PATH=/usr/include/gdal
-        pip install GDAL==3.4.3
+        sudo apt-get install -y libgdal-dev gdal-bin
     - name: Install Rasterio
       run: |
         pip install -U pip
