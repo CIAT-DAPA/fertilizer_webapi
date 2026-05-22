@@ -9,7 +9,7 @@ class TestAgroadisory(unittest.TestCase):
         self.app = app.test_client()
 
     def test_coordinates(self):
-        """  for this endoint we need to build an url to do a request, that url needs a library called  URLSearchParams, this join a parametres and create an url
+        """  for this endoint we need to build an url to do a request, the url is assembled with standard query-string encoding and should match the geoserver request format
             example of parametres:
             parameters={
                     'service':'WMS',
@@ -27,7 +27,7 @@ class TestAgroadisory(unittest.TestCase):
                     'y':50,
                     'bbox':str(lon - 0.1) + ',' + str(lat - 0.1) + ',' + str(lon + 0.1) + ',' + str(lat + 0.1)}
             layer is a input in he API, example: et_wheat_compost_probabilistic_below
-            the url is built like this: URL=str(URLSearchParams(GEOSERVER_URL + SERVICEE).append(parameters))
+            the url is built like this: URL = GEOSERVER_URL + SERVICEE + "?" + urlencode(parameters)
             GEOSERVER_URL value never change and the value is : "https://geo.aclimate.org/geoserver/fertilizer_et/"
             SERVICEE value never change and the value is "wms" 
             in parameters lat and lon are taken from an array od coodinates that we sent like parmeters.
