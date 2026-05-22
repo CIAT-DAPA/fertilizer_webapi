@@ -1,9 +1,9 @@
 import os
 from flask_restful import Resource
-from URLSearchParams import URLSearchParams
 import requests
 import json
 import ast
+from urllib.parse import urlencode
 GEOSERVER_URL="https://geo.aclimate.org/geoserver/fertilizer_et/"
 SERVICEE="wms"
 #Example of layer:fertilizer_et:et_wheat_compost_probabilistic_bellow
@@ -95,7 +95,7 @@ class Coordinates(Resource):
                 'y':50,
                 'bbox':str(lon - 0.1) + ',' + str(lat - 0.1) + ',' + str(lon + 0.1) + ',' + str(lat + 0.1)}
 
-            self.url=str(URLSearchParams(GEOSERVER_URL + SERVICEE).append(parameters))
+              self.url = GEOSERVER_URL + SERVICEE + "?" + urlencode(parameters)
             
             response= requests.get(self.url)
             data= response.json()
