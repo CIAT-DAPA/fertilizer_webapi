@@ -8,7 +8,7 @@ pipeline {
     environment {
         user = credentials('agroadvisory_user')
         host = credentials('agroadvisory_host')
-        //name = credentials('agroadvisory_name')
+        name = credentials('agroadvisory_name')
         ssh_key = credentials('agroadvisory_key')
     }
 
@@ -20,7 +20,7 @@ pipeline {
                     remote.allowAnyHosts = true
                     remote.identityFile = ssh_key
                     remote.user = user
-                    //remote.name = name
+                    remote.name = name
                     remote.host = host
                     
                 }
