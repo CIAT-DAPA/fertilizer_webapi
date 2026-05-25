@@ -97,7 +97,7 @@ jobs:
       run: zip releaseApi.zip ./src/* -r
     # Upload Artifacts
     - name: Upload Api artifact for deployment job
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: WebApi
         path: releaseApi.zip
