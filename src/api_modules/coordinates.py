@@ -95,7 +95,7 @@ class Coordinates(Resource):
                 'y':50,
                 'bbox':str(lon - 0.1) + ',' + str(lat - 0.1) + ',' + str(lon + 0.1) + ',' + str(lat + 0.1)}
 
-              self.url = GEOSERVER_URL + SERVICEE + "?" + urlencode(parameters)
+            self.url = GEOSERVER_URL + SERVICEE + "?" + urlencode(parameters)
             
             response= requests.get(self.url)
             data= response.json()
