@@ -8,8 +8,8 @@ pipeline {
     environment {
         user = credentials('agroadvisory_user')
         host = credentials('agroadvisory_host')
-        //name = credentials('fertalizer_name')
-        //ssh_key = credentials('fertalizer_devops')
+        //name = credentials('agroadvisory_name')
+        ssh_key = credentials('agroadvisory_key')
     }
 
     stages {
