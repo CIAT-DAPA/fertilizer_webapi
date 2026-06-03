@@ -84,7 +84,8 @@ api.add_resource(MetricTypes, '/metric_types')
 
 
 
-connect(host=config['CONNECTION_DB'])
+if os.getenv('UNITTEST') != '1':
+    connect(host=config['CONNECTION_DB'])
 
 
 if __name__ == '__main__':

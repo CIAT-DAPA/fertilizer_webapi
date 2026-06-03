@@ -1,13 +1,16 @@
 import unittest
 import requests
 from agroadvisory_api import app
-from mongoengine import connect, disconnect
+from unit_tests.mongo_test_setup import use_mongomock, teardown_mongomock
 
 class TestAgroadisory(unittest.TestCase):
 
     def setUp(self):
-        connect('mongoenginetest', host='mongomock://localhost')
+        use_mongomock()
         self.app = app.test_client()
+
+    def tearDown(self):
+        teardown_mongomock()
 
     def test_single_adm4(self):
         #this endpoint receives one paremeter after adm4/(Kebele) that correspond to the admistrative level 3
