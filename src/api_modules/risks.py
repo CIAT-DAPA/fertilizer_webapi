@@ -1,14 +1,17 @@
 from flask import Flask, jsonify
 from flask_restful import Resource
-from orm.database import Risk
-import json
+from bson import ObjectId
+from bson.errors import InvalidId
+
+from orm.database import Risk, MetricType
+
 
 class Risks(Resource):
 
     def __init__(self):
         super().__init__()
 
-    def get(self, adm4 = None, forecast= None):
+    def get(self, adm4=None, forecast=None):
         """
         Get Risk data for a adminsitrative level 4 (Kebele)
         ---
@@ -43,23 +46,55 @@ class Risks(Resource):
                 risk:
                   description: list risk
                   type: object
-                  properties: 
-                    name: 
+                  properties:
+                    name:
                       type: string
                     values:
                       type: array
                       items: {}
                       description: Value of risk
-                  
+
         """
-        q_set = None
         if adm4 is None:
-            q_set = Risk.objects()
+            qs = Risk.objects()
         else:
-            ids = adm4.split(',')
-            q_set = Risk.objects(adm4__in=ids)
+            oids = []
+            for part in adm4.split(","):
+                part = part.strip()
+                if not part:
+                    continue
+                try:
+                    oids.append(ObjectId(part))
+                except InvalidId:
+                    continue
+            if not oids:
+                return []
+            qs = Risk.objects(adm4__in=oids)
         if forecast is not None:
-            q_set= q_set.filter(forecast=forecast)
-        json_data = [{"id":str(x.id),"adm4":str(x.adm4.id),"forecast":str(x.forecast.id),"type":str(x.type.id),"risk":x.values[0]} for x in q_set]
+            try:
+                qs = qs.filter(forecast=ObjectId(forecast))
+            except InvalidId:
+                return []
+
+        raw_docs = list(qs.as_pymongo())
+        type_ids = {doc.get("type") for doc in raw_docs if doc.get("type")}
+        type_names = {}
+        if type_ids:
+            for mt in MetricType.objects(id__in=list(type_ids)):
+                type_names[mt.id] = mt.name
+
+        json_data = []
+        for doc in raw_docs:
+            tid = doc.get("type")
+            values = doc.get("values") or []
+            json_data.append(
+                {
+                    "id": str(doc["_id"]),
+                    "adm4": str(doc["adm4"]) if doc.get("adm4") is not None else None,
+                    "forecast": str(doc["forecast"]) if doc.get("forecast") is not None else None,
+                    "type": str(tid) if tid is not None else None,
+                    "type_name": type_names.get(tid) if tid is not None else None,
+                    "risk": values[0] if values else None,
+                }
+            )
         return json_data
-        

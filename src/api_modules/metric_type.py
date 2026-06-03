@@ -4,7 +4,7 @@ from orm.database import MetricType
 import datetime
 import json
 
-class MetricType(Resource):
+class MetricTypes(Resource):
 
     def __init__(self):
         super().__init__()
