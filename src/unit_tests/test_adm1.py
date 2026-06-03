@@ -2,15 +2,17 @@ import unittest
 import sys
 sys.path.append("./src/")
 from agroadvisory_api import app
-import requests
-from mongoengine import connect, disconnect
+from unit_tests.mongo_test_setup import use_mongomock, teardown_mongomock
 
-import requests
+
 class TestAgroadisory(unittest.TestCase):
 
     def setUp(self):
-        connect('mongoenginetest', host='mongomock://localhost')
+        use_mongomock()
         self.app = app.test_client()
+
+    def tearDown(self):
+        teardown_mongomock()
 
     def test_single_adm1(self):
         

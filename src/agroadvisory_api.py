@@ -4,8 +4,13 @@ import sys
 from flask import Flask, redirect
 from flask_restful import Api
 from flask_cors import CORS
-from flasgger import Swagger
 from conf import config
+
+try:
+    from flasgger import Swagger
+    HAS_SWAGGER = True
+except ImportError:
+    HAS_SWAGGER = False
 
 from api_modules.kebele import Kebele
 from api_modules.woreda import Woreda
@@ -20,7 +25,7 @@ from api_modules.adm4 import AdministrativeLevel4
 from api_modules.crops import Crops
 from api_modules.forecasts import Forecasts
 from api_modules.metrics import Metrics
-from api_modules.metric_type import MetricType
+from api_modules.metric_type import MetricTypes
 from api_modules.risks import Risks
 from api_modules.coordinates import Coordinates
 from api_modules.layers_fertilizer import Layers
@@ -28,14 +33,31 @@ from api_modules.layers_fertilizer import Layers
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(
+    app,
+    resources={r'/*': {'origins': '*'}},
+    allow_headers=['Content-Type', 'Authorization'],
+    methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+)
 api = Api(app)
-swagger = Swagger(app)
+
+if HAS_SWAGGER:
+    Swagger(app)
+
+    @app.route('/')
+    def home():
+        return redirect("/apidocs")
+else:
+
+    @app.route('/')
+    def home():
+        return {'status': 'ok', 'message': 'HaFAS API (install flasgger for /apidocs)'}
 
 
-@app.route('/')
-def home():
-    return redirect("/apidocs")
+@app.route('/health')
+def health():
+    """Quick check that this process is the current API build (metrics use PyMongo, no DBRef 500)."""
+    return {'status': 'ok', 'metrics': 'pymongo-v2'}
 
 
 #api.add_resource(Woreda, '/woredas', endpoint="woredas")
@@ -57,19 +79,25 @@ api.add_resource(Coordinates, '/coordinates/<layer>/<coor>/<date>')
 api.add_resource(Layers, '/layers_fertilizer')
 
 #api.add_resource(Layers, '/layers')
-#api.add_resource(MetricType, '/metric_types')
+api.add_resource(MetricTypes, '/metric_types')
 
 
+
+
+if os.getenv('UNITTEST') != '1':
+    connect(host=config['CONNECTION_DB'])
 
 
 if __name__ == '__main__':
-    connect(host=config['CONNECTION_DB'])
-    print("Connected DB")
-    
-    if config['DEBUG']:
-        app.run(threaded=True, port=config['PORT'], debug=config['DEBUG'])
-    else:
-        app.run(host=config['HOST'], port=config['PORT'],
-                debug=config['DEBUG'])
+    print("Connected DB — API on port", config['PORT'])
+
+    host = '127.0.0.1' if config['DEBUG'] else config['HOST']
+    app.run(
+        host=host,
+        port=config['PORT'],
+        debug=config['DEBUG'],
+        use_reloader=False,
+        threaded=True,
+    )
 
 # nohup python3 agroadvisory_api.py > log.txt 2>&1 &
