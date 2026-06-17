@@ -1,6 +1,8 @@
 from flask import Flask, request
 from flask_restful import Resource, reqparse
 from orm.database import Forecast
+from bson import ObjectId
+from bson.errors import InvalidId
 import datetime
 import json
 
@@ -39,7 +41,10 @@ class Forecasts(Resource):
         if crop is None:
             q_set = Forecast.objects()
         else:
-            print("entro 2")
-            q_set = Forecast.objects(crop=crop)
+            try:
+                crop_id = ObjectId(crop)
+            except (InvalidId, TypeError):
+                return []
+            q_set = Forecast.objects(crop=crop_id)
         json_data = [{"id":str(x.id),"date":x.date.strftime("%Y-%m"),"crop":str(x.crop.id)} for x in q_set]
         return json_data
