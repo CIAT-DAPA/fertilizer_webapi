@@ -1,1 +1,4 @@
 /venv
+
+# Server / local configuration with secrets (see src/.env.example)
+.env

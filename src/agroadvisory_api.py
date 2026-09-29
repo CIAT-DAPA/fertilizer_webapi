@@ -29,6 +29,7 @@ from api_modules.metric_type import MetricTypes
 from api_modules.risks import Risks
 from api_modules.coordinates import Coordinates
 from api_modules.layers_fertilizer import Layers
+from api_modules.chatbot import ChatbotMessage
 #from api_modules.layers import Layers
 
 
@@ -77,6 +78,8 @@ api.add_resource(Metrics, '/metrics/<adm4>')
 api.add_resource(Risks, '/risk/<adm4>/<forecast>')
 api.add_resource(Coordinates, '/coordinates/<layer>/<coor>/<date>')
 api.add_resource(Layers, '/layers_fertilizer')
+# Chatbot (server-side OpenAI proxy; key never reaches the browser)
+api.add_resource(ChatbotMessage, '/chatbot/message')
 
 #api.add_resource(Layers, '/layers')
 api.add_resource(MetricTypes, '/metric_types')
