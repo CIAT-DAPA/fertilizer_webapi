@@ -30,17 +30,9 @@ pipeline {
             steps {
                 script {
                     sshCommand remote: remote, command: """
-                        cd /var/www/docs/webapi/
+                        cd /opt/nagroadvisory/back
                         sudo kill -9 \$(sudo netstat -nepal | grep 5000 | awk '{print \$9}' | awk -F '/' '{print \$1}')
-                        rm -fr api_backup_\$(date +"%Y%m%d")
-                        mv api api_backup_\$(date +"%Y%m%d")
-                        rm -fr releaseApi.zip
-                        curl -LOk https://github.com/CIAT-DAPA/fertilizer_webapi/releases/latest/download/releaseApi.zip
-                        unzip -o releaseApi.zip
-                        rm -fr releaseApi.zip
-                        mkdir api
-                        mv src/* api
-                        rm -fr src
+                        git pull origin main
                     """
                 }
             }
@@ -49,18 +41,7 @@ pipeline {
             steps {
                 script {
                     sshCommand remote: remote, command: """
-                        cd /var/www/docs/webapi/
-                        source env/bin/activate
-                        export DEBUG=False
-                        export WORKSPACE=fertilizer_et
-                        export LAYER_NAME=:et_wheat_fertilizer_recommendation_normal
-                        export SERVICE=WFS
-                        export GEOSERVER_URL="https://geo.aclimate.org/geoserver/"
-                        export FERTILIZER_RASTERS_DIR="./raster_files/cropped/"
-                        export PORT=5000
-                        export CONNECTION_DB=mongodb://localhost:27017/nextgen_db
-                        export HOST=0.0.0.0
-                        cd api/
+                        cd /opt/nagroadvisory/back/src
                         nohup python agroadvisory_api.py > log.txt 2>&1 &
                     """
                 }
