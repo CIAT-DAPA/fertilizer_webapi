@@ -19,12 +19,14 @@ jobs:
 
   TestApi:
 
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest moved to 26.04, which has no Python 3.9 build.
+    # The pinned dependencies (numpy 1.22, pandas 1.4) need Python <= 3.10.
+    runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python 3.9
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: "3.9"
     - name: Add conda to PATH
@@ -92,9 +94,6 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: '0'
-    - uses: actions/setup-node@v3
-      with:
-          node-version: 18
     # API Zip
     - name: Zip artifact for deployment
       run: zip releaseApi.zip ./src/* -r
