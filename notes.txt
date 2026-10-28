@@ -1,6 +1,10 @@
 # Agroadvisory
 
-pm2 serve agroadvisory 3000 --name agroadvisory --spa
+# Node.js 22 + pm2 come from the conda env api_env on prodnodejs01
+# (the OS Node.js /usr/bin/node 18.x is end of life and is being removed).
+export PATH=/opt/miniforge3/envs/api_env/bin:$PATH
+pm2 serve /opt/nagroadvisory/front 3000 --name agroadvisory --spa
+pm2 save
 pm2 delete website
 
 # API Linux
